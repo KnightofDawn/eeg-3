@@ -1,7 +1,7 @@
 import os
 import numpy as np
 
-class EggData:
+class EegData:
   TYPE_DATA = 'data'
   TYPE_EVENTS = 'events'
 
@@ -48,7 +48,7 @@ class EggData:
     pass
 
 # Test examples
-# v = EggData()
+# v = EegData()
 # v.load('e:/eeg/data/random', 'subj1_series1_events.bin')
 # v.save('e:/eeg/data/randomr/')
 # print v.name, v.type, v.data.shape
