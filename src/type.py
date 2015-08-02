@@ -54,8 +54,25 @@ class EegData:
   def row_to_string(row):
     return ','.join([str(x) for x in row])
 
+  @staticmethod
+  def output_submission(prediction_array, output_path):
+    for prediction in prediction_array:
+      if prediction.type != EegData.TYPE_EVENTS:
+        print 'Error: prediction_array contains a invalid prediction'
+        return
+
+    prediction_array.sort()
+
+    header = 'id,HandStart,FirstDigitTouch,BothStartLoadPhase,LiftOff,Replace,BothReleased\n'
+
+    buf_arr = map(lambda x: x.to_string(), prediction_array)
+    content = header + ''.join(buf_arr)
+
+    with open(output_path, 'w') as output_file:
+      output_file.write(content)
 
 # Test examples
+
 # v = EegData()
 # v.load('e:/eeg/data/random', 'subj1_series1_events.bin')
 # v.save('e:/eeg/data/randomr/')
@@ -67,3 +84,16 @@ class EegData:
 # v.data = np.arange(6).reshape(2, 3)
 # print v.data
 # print v.to_string()
+
+# v = EegData()
+# v.name = 'test1'
+# v.data = np.arange(12).reshape(2, 6)
+# v.type = EegData.TYPE_EVENTS;
+
+# u = EegData()
+# u.name = 'test0'
+# u.data = np.arange(12).reshape(2, 6)
+# u.type = EegData.TYPE_EVENTS;
+
+# l = [u, v]
+# EegData.output_submission(l, 'test.csv')
