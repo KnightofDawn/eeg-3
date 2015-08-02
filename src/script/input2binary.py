@@ -4,15 +4,12 @@ import numpy as np
 
 def parse_csv(file_name, ncol):
   with open(file_name) as text:
-    # Set unpack=True, which means the array is transposed
-    # Then data of each frame will be a column vector
     data = np.loadtxt(
       text,
       dtype = int,
       delimiter=',',
       skiprows=1,
-      usecols=xrange(1, ncol + 1)
-      unpack=True,
+      usecols = xrange(1, ncol + 1)
     )
     return data
 
