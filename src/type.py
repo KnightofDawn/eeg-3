@@ -44,8 +44,16 @@ class EegData:
 
     self.data = np.load(input_path)
 
-  def output(self):
-    pass
+  def to_string(self):
+    result = ''
+    for i, row in enumerate(self.data):
+      result += '{}_{},{}\n'.format(self.name, i, self.row_to_string(row))
+    return result
+
+  @staticmethod
+  def row_to_string(row):
+    return ','.join([str(x) for x in row])
+
 
 # Test examples
 # v = EegData()
@@ -53,3 +61,9 @@ class EegData:
 # v.save('e:/eeg/data/randomr/')
 # print v.name, v.type, v.data.shape
 
+# v = EegData()
+# v.name = 'test'
+# v.type = 'test'
+# v.data = np.arange(6).reshape(2, 3)
+# print v.data
+# print v.to_string()
