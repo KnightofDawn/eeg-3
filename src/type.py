@@ -45,10 +45,14 @@ class EegData:
     self.data = np.load(input_path)
 
   def to_string(self):
-    result = ''
-    for i, row in enumerate(self.data):
-      result += '{}_{},{}\n'.format(self.name, i, self.row_to_string(row))
-    return result
+    return ''.join(
+      map(
+        lambda (i, row): '{}_{},{}\n'.format(
+          self.name, i, self.row_to_string(row)
+        ),
+        enumerate(self.data),
+      )
+    )
 
   @staticmethod
   def row_to_string(row):
