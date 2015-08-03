@@ -44,7 +44,7 @@ class EegData:
 
         self.data = np.load(input_path)
 
-    def to_string(self):
+    def __str__(self):
         return ''.join(
             map(
                 lambda (i, row): '{}_{},{}\n'.format(
@@ -69,7 +69,7 @@ class EegData:
 
         header = 'id,HandStart,FirstDigitTouch,BothStartLoadPhase,LiftOff,Replace,BothReleased\n'
 
-        buf_arr = map(lambda x: x.to_string(), prediction_array)
+        buf_arr = map(lambda x: str(x), prediction_array)
         content = header + ''.join(buf_arr)
 
         with open(output_path, 'w') as output_file:
