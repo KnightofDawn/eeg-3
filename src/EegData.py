@@ -24,6 +24,12 @@ class EegData:
         with open(output_path, 'wb') as output:
             np.save(output, self.data)
 
+    @classmethod
+    def from_load(cls, input_dir, input_filename):
+        data = cls()
+        data.load(input_dir, input_filename)
+        return data
+
     def load(self, input_dir, input_filename):
         # Note that we need to specify the file name
         input_path = os.path.join(input_dir, input_filename)
@@ -100,3 +106,6 @@ def output_submission(prediction_array, output_path):
 
 # l = [u, v]
 # EegData.output_submission(l, 'test.csv')
+
+v = EegData.from_load('e:/eeg/data/random', 'subj1_series1_events.bin')
+print v.name, v.data.shape
