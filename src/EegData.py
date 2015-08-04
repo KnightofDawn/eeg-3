@@ -4,6 +4,7 @@ import numpy as np
 class EegData:
     TYPE_DATA = 'data'
     TYPE_EVENTS = 'events'
+    TYPES = [TYPE_DATA, TYPE_EVENTS]
 
     def __init__(self, name=None, eeg_type=None, data=None):
         self.name = name
@@ -80,6 +81,29 @@ def output_submission(prediction_array, output_path):
     with open(output_path, 'w') as output_file:
         output_file.write(content)
 
+def extract_type(file_name):
+    l = file_name.rfind('_');
+    r = file_name.rfind('.bin');
+    extracted = file_name[l + 1 : r]
+    if extracted in EegData.TYPES:
+        return extracted
+    else:
+        return ''
+
+# Load all data from a folder, for a list of types
+def load_folder(input_dir, types):
+    if not os.path.isdir(input_dir):
+        print 'Error: invalid input_dir "{}"'.format(input_dir)
+
+    input_files = os.listdir(input_dir)
+
+    if not type(types) is list:
+        types = [types]
+
+    input_files = filter(lambda x: extract_type(x) in types, input_files)
+    data_arr = map(lambda x: EegData.from_load(input_dir, x), input_files)
+    return data_arr
+
 # Test examples
 
 # v = EegData()
@@ -107,5 +131,7 @@ def output_submission(prediction_array, output_path):
 # l = [u, v]
 # EegData.output_submission(l, 'test.csv')
 
-v = EegData.from_load('e:/eeg/data/random', 'subj1_series1_events.bin')
-print v.name, v.data.shape
+# v = EegData.from_load('e:/eeg/data/random', 'subj1_series1_events.bin')
+# print v.name, v.data.shape
+
+# load_folder('e:/eeg/data/train_bin', EegData.TYPE_DATA)
