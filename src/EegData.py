@@ -58,22 +58,21 @@ class EegData:
     def row_to_string(row):
         return ','.join([str(x) for x in row])
 
-    @staticmethod
-    def output_submission(prediction_array, output_path):
-        for prediction in prediction_array:
-            if prediction.type != EegData.TYPE_EVENTS:
-                print 'Error: prediction_array contains a invalid prediction'
-                return
+def output_submission(prediction_array, output_path):
+    for prediction in prediction_array:
+        if prediction.type != EegData.TYPE_EVENTS:
+            print 'Error: prediction_array contains a invalid prediction'
+            return
 
-        prediction_array.sort()
+    prediction_array.sort()
 
-        header = 'id,HandStart,FirstDigitTouch,BothStartLoadPhase,LiftOff,Replace,BothReleased\n'
+    header = 'id,HandStart,FirstDigitTouch,BothStartLoadPhase,LiftOff,Replace,BothReleased\n'
 
-        buf_arr = map(lambda x: str(x), prediction_array)
-        content = header + ''.join(buf_arr)
+    buf_arr = map(lambda x: str(x), prediction_array)
+    content = header + ''.join(buf_arr)
 
-        with open(output_path, 'w') as output_file:
-            output_file.write(content)
+    with open(output_path, 'w') as output_file:
+        output_file.write(content)
 
 # Test examples
 
