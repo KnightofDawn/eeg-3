@@ -17,6 +17,7 @@ logger = logging.getLogger()
 
 # Global variables
 validate = True
+nsubjects = 12
 data_dir = '../../data'
 
 
@@ -50,7 +51,6 @@ if __name__ == '__main__':
     print('\'validate\' is %s' % validate)
 
     # Launch a separate process for each subject
-    nsubjects = 1
     pool = Pool()
     results = pool.map(run, range(1, nsubjects + 1))
     pool.close()
