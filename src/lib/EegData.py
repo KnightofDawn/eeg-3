@@ -2,8 +2,9 @@ import os
 import numpy as np
 
 class EegData:
-    TYPE_DATA = 'data'
     TYPE_EVENTS = 'events'
+    TYPE_DATA = 'data'
+    TYPE_FFT0 = 'fft0'
     TYPES = [TYPE_DATA, TYPE_EVENTS]
 
     def __init__(self, name=None, eeg_type=None, data=None):
@@ -103,6 +104,10 @@ def load_folder(input_dir, types):
     input_files = filter(lambda x: extract_type(x) in types, input_files)
     data_arr = map(lambda x: EegData.from_load(input_dir, x), input_files)
     return data_arr
+
+def load_folder_as_dict(input_dir, types):
+    l = load_folder(input_dir, types)
+    return dict(zip([x.name for x in l], l))
 
 # Test examples
 

@@ -39,10 +39,10 @@ class DataPipeOffline:
         self.function_inst = self.function()
 
         if self.workers == 1:
-            output_list = map(self.calc, range(n))
+            output_list = map(self.calc_impl, range(n))
         else:
             pool = mp.Pool(self.workers)
-            output_list = map(self.calc, range(n))
+            output_list = map(self.calc_impl, range(n))
 
         return np.concatenate(output_list)
 
