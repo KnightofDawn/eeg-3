@@ -70,7 +70,7 @@ class EegNeonData(Dataset):
             return
         self.__dict__.update(kwargs)
 
-        if validate:
+        if self.validate:
             train, train_labs, _ = self.readfiles('train', [7])
             test, test_labs, self.testinds = self.readfiles('train', [8])
         else:
@@ -147,13 +147,13 @@ class EegNeonData(Dataset):
 
 
 if __name__ == '__main__':
-    eeg_ds = EegNeonData(subj=1)
 
     ROOT_DIR = '../../'
     data_dir = os.path.join(ROOT_DIR, 'data')
+    eeg_ds = EegNeonData(subj=1, data_dir=data_dir)
 
 
-    data, labs, inds = eeg_ds.readfiles(data_dir, 'train', [3])
+    data, labs, inds = eeg_ds.readfiles('train', [3])
     print(data.shape)
     print(labs.shape)
     print(inds.shape)
