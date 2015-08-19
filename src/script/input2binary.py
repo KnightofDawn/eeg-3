@@ -5,23 +5,27 @@ import sys
 
 import numpy as np
 
+
 def parse_csv(file_name, ncol):
     with open(file_name) as text:
         data = np.loadtxt(
             text,
-            dtype = int,
+            dtype=int,
             delimiter=',',
             skiprows=1,
-            usecols = range(1, ncol + 1)
+            usecols=range(1, ncol + 1)
         )
         return data
+
 
 def save_binary(file_name, arr):
     with open(file_name, 'wb') as output:
         np.save(output, arr)
 
+
 def load_binary(file_name):
     return np.load(file_name)
+
 
 def main():
     if len(sys.argv) < 3:
@@ -33,7 +37,7 @@ def main():
         if sys.argv[3] == '--test':
             test_flag = True
 
-    _, input_dir, output_dir = sys.argv[0 : 3]
+    _, input_dir, output_dir = sys.argv[0: 3]
     input_dir = input_dir.strip()
     output_dir = output_dir.strip()
 
@@ -55,7 +59,7 @@ def main():
         if r == -1:
             continue
 
-        output_file = input_file[0 : r] + '.bin'
+        output_file = input_file[0: r] + '.bin'
 
         input_full = os.path.join(input_dir, input_file)
 

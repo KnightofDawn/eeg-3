@@ -3,6 +3,7 @@ import os
 
 import numpy as np
 
+
 class EegData:
     TYPE_DATA = 'data'
     TYPE_EVENTS = 'events'
@@ -38,17 +39,17 @@ class EegData:
         input_path = os.path.join(input_dir, input_filename)
 
         r = input_filename.rfind('.bin')
-        input_filename = input_filename[0 : r]
+        input_filename = input_filename[0: r]
 
         r = input_filename.rfind('_')
-        self.name = input_filename[0 : r]
+        self.name = input_filename[0: r]
 
-        if input_filename[r + 1 : ] == 'data':
+        if input_filename[r + 1:] == 'data':
             self.type = self.TYPE_DATA
-        elif input_filename[r + 1 : ] == 'events':
+        elif input_filename[r + 1:] == 'events':
             self.type = self.TYPE_EVENTS
         else:
-            print('Error: unkonwn eeg_type when loading')
+            print('Error: unknown eeg_type when loading')
             return
 
         self.data = np.load(input_path)
@@ -67,6 +68,7 @@ class EegData:
     def row_to_string(row):
         return ','.join([str(x) for x in row])
 
+
 def output_submission(prediction_array, output_path):
     for prediction in prediction_array:
         if prediction.type != EegData.TYPE_EVENTS:
@@ -83,14 +85,16 @@ def output_submission(prediction_array, output_path):
     with open(output_path, 'w') as output_file:
         output_file.write(content)
 
+
 def extract_type(file_name):
-    l = file_name.rfind('_');
-    r = file_name.rfind('.bin');
-    extracted = file_name[l + 1 : r]
+    l = file_name.rfind('_')
+    r = file_name.rfind('.bin')
+    extracted = file_name[l + 1: r]
     if extracted in EegData.TYPES:
         return extracted
     else:
         return ''
+
 
 # Load all data from a folder, for a list of types
 def load_folder(input_dir, types):
