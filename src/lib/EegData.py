@@ -1,4 +1,6 @@
+from __future__ import print_function
 import os
+
 import numpy as np
 
 class EegData:
@@ -19,7 +21,7 @@ class EegData:
         elif self.type == self.TYPE_EVENTS:
             output_path = os.path.join(output_dir, self.name + '_events.bin')
         else:
-            print 'Error: unknown eeg_type when saving'
+            print('Error: unknown eeg_type when saving')
             return
 
         with open(output_path, 'wb') as output:
@@ -46,7 +48,7 @@ class EegData:
         elif input_filename[r + 1 : ] == 'events':
             self.type = self.TYPE_EVENTS
         else:
-            print 'Error: unkonwn eeg_type when loading'
+            print('Error: unkonwn eeg_type when loading')
             return
 
         self.data = np.load(input_path)
@@ -54,8 +56,8 @@ class EegData:
     def __str__(self):
         return ''.join(
             map(
-                lambda (i, row): '{}_{},{}\n'.format(
-                    self.name, i, self.row_to_string(row)
+                lambda i_and_row: '{}_{},{}\n'.format(
+                    self.name, i_and_row[0], self.row_to_string(i_and_row[1])
                 ),
                 enumerate(self.data),
             )
@@ -68,7 +70,7 @@ class EegData:
 def output_submission(prediction_array, output_path):
     for prediction in prediction_array:
         if prediction.type != EegData.TYPE_EVENTS:
-            print 'Error: prediction_array contains a invalid prediction'
+            print('Error: prediction_array contains a invalid prediction')
             return
 
     prediction_array.sort()
@@ -93,7 +95,7 @@ def extract_type(file_name):
 # Load all data from a folder, for a list of types
 def load_folder(input_dir, types):
     if not os.path.isdir(input_dir):
-        print 'Error: invalid input_dir "{}"'.format(input_dir)
+        print('Error: invalid input_dir "{}"'.format(input_dir))
 
     input_files = os.listdir(input_dir)
 

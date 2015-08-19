@@ -1,5 +1,8 @@
+from __future__ import print_function
+from builtins import range
 import os
 import sys
+
 import numpy as np
 
 def parse_csv(file_name, ncol):
@@ -9,7 +12,7 @@ def parse_csv(file_name, ncol):
             dtype = int,
             delimiter=',',
             skiprows=1,
-            usecols = xrange(1, ncol + 1)
+            usecols = range(1, ncol + 1)
         )
         return data
 
@@ -22,7 +25,7 @@ def load_binary(file_name):
 
 def main():
     if len(sys.argv) < 3:
-        print 'Usage: python input2binary.py input_dir/ output_dir/ [--test]'
+        print('Usage: python input2binary.py input_dir/ output_dir/ [--test]')
         return
 
     test_flag = False
@@ -35,11 +38,11 @@ def main():
     output_dir = output_dir.strip()
 
     if not os.path.isdir(input_dir):
-        print 'Error: invalid input_dir "{}"'.format(input_dir)
+        print('Error: invalid input_dir "{}"'.format(input_dir))
         return
 
     if not os.path.isdir(output_dir):
-        print 'Error: invalid output_dir "{}"'.format(output_dir)
+        print('Error: invalid output_dir "{}"'.format(output_dir))
         return
 
     input_files = os.listdir(input_dir)
@@ -65,14 +68,15 @@ def main():
         output_full = os.path.join(output_dir, output_file)
         save_binary(output_full, data)
 
-        print '{} => {}, {} rows, {} cols'.format(
+        print('{} => {}, {} rows, {} cols'.format(
             input_file, output_file, data.shape[0], data.shape[1]
-        )
+        ))
 
         if test_flag:
             readback = load_binary(output_full)
             if np.all(data == readback):
-                print 'test pass!'
+                print('test pass!')
+
 
 if __name__ == '__main__':
     main()
