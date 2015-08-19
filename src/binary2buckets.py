@@ -6,7 +6,7 @@ from lib import EegData
 from lib import DataPipe
 
 def bin2bucket_batch(raw_data):
-    fft_data_list = map(bin2fft_bucket, raw_data)
+    fft_data_list = map(bin2bucket, raw_data.values())
     return dict(zip([x.name for x in fft_data_list], fft_data_list))
 
 def bin2bucket(eeg_data):
@@ -46,11 +46,11 @@ def bin2bucket_impl(data):
     pipe = DataPipe.DataPipeOffline(
         depth = n_points,
         default = 0,
-        workers = 1
+        workers = 4
     )
 
     pipe.set_function(FFTBucket)
-    return pipe.calc(data)
+    return np.concatenate(map(pipe.calc, data.T), axis=1)
 
 def main():
     if len(sys.argv) < 3:
@@ -81,5 +81,5 @@ def test():
     print bin2bucket_impl(v)
 
 if __name__ == '__main__':
-    # main()
-    test()
+    main()
+    # test()

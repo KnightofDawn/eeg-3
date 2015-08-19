@@ -47,7 +47,7 @@ class DataPipeOffline:
         return np.concatenate(output_list)
 
     def calc_impl(self, begin):
-        data = self.input_series[begin : (begin + self.depth), :]
+        data = self.input_series[begin : (begin + self.depth)]
         return self.function_inst.calc(data)
 
 def test():
