@@ -1,5 +1,8 @@
+from __future__ import print_function
 import os
+
 import numpy as np
+
 
 class EegData:
     TYPE_EVENTS = 'events'
@@ -22,7 +25,7 @@ class EegData:
         elif self.type == self.TYPE_FFT0:
             output_path = os.path.join(output_dir, self.name + '_fft0.bin')
         else:
-            print 'Error: unknown eeg_type when saving'
+            print('Error: unknown eeg_type when saving')
             return
 
         with open(output_path, 'wb') as output:
@@ -33,17 +36,17 @@ class EegData:
         input_path = os.path.join(input_dir, input_filename)
 
         r = input_filename.rfind('.bin')
-        input_filename = input_filename[0 : r]
+        input_filename = input_filename[0: r]
 
         r = input_filename.rfind('_')
-        self.name = input_filename[0 : r]
+        self.name = input_filename[0: r]
 
-        if input_filename[r + 1 : ] == 'data':
+        if input_filename[r + 1:] == 'data':
             self.type = self.TYPE_DATA
-        elif input_filename[r + 1 : ] == 'events':
+        elif input_filename[r + 1:] == 'events':
             self.type = self.TYPE_EVENTS
         else:
-            print 'Error: unkonwn eeg_type when loading'
+            print('Error: unknown eeg_type when loading')
             return
 
         self.data = np.load(input_path)
@@ -51,8 +54,8 @@ class EegData:
     def __str__(self):
         return ''.join(
             map(
-                lambda (i, row): '{}_{},{}\n'.format(
-                    self.name, i, self.row_to_string(row)
+                lambda i_and_row: '{}_{},{}\n'.format(
+                    self.name, i_and_row[0], self.row_to_string(i_and_row[1])
                 ),
                 enumerate(self.data),
             )
@@ -70,7 +73,7 @@ def from_load(input_dir, input_filename):
 def output_submission(prediction_array, output_path):
     for prediction in prediction_array:
         if prediction.type != EegData.TYPE_EVENTS:
-            print 'Error: prediction_array contains a invalid prediction'
+            print('Error: prediction_array contains a invalid prediction')
             return
 
     prediction_array.sort()
@@ -83,19 +86,21 @@ def output_submission(prediction_array, output_path):
     with open(output_path, 'w') as output_file:
         output_file.write(content)
 
+
 def extract_type(file_name):
-    l = file_name.rfind('_');
-    r = file_name.rfind('.bin');
-    extracted = file_name[l + 1 : r]
+    l = file_name.rfind('_')
+    r = file_name.rfind('.bin')
+    extracted = file_name[l + 1: r]
     if extracted in EegData.TYPES:
         return extracted
     else:
         return ''
 
+
 # Load all data from a folder, for a list of types
 def load_folder(input_dir, types):
     if not os.path.isdir(input_dir):
-        print 'Error: invalid input_dir "{}"'.format(input_dir)
+        print('Error: invalid input_dir "{}"'.format(input_dir))
 
     input_files = os.listdir(input_dir)
 
