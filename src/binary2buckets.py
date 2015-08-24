@@ -80,7 +80,7 @@ def main():
     input_files = os.listdir(input_dir)
     types = [EegData.EegData.TYPE_DATA]
     input_files = filter(lambda x: EegData.extract_type(x) in types, input_files)
-    pool = mp.Pool(4)
+    pool = mp.Pool(16)
     func = partial(process, input_dir, output_dir)
     pool.map(func, input_files)
 
