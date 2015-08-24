@@ -19,18 +19,14 @@ class EegData:
             output_path = os.path.join(output_dir, self.name + '_data.bin')
         elif self.type == self.TYPE_EVENTS:
             output_path = os.path.join(output_dir, self.name + '_events.bin')
+        elif self.type == self.TYPE_FFT0:
+            output_path = os.path.join(output_dir, self.name + '_fft0.bin')
         else:
             print 'Error: unknown eeg_type when saving'
             return
 
         with open(output_path, 'wb') as output:
             np.save(output, self.data)
-
-    @classmethod
-    def from_load(cls, input_dir, input_filename):
-        data = cls()
-        data.load(input_dir, input_filename)
-        return data
 
     def load(self, input_dir, input_filename):
         # Note that we need to specify the file name
@@ -65,6 +61,11 @@ class EegData:
     @staticmethod
     def row_to_string(row):
         return ','.join([str(x) for x in row])
+
+def from_load(input_dir, input_filename):
+    data = EegData()
+    data.load(input_dir, input_filename)
+    return data
 
 def output_submission(prediction_array, output_path):
     for prediction in prediction_array:

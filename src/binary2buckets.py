@@ -2,6 +2,8 @@ import os
 import sys
 import math
 import numpy as np
+import multiprocessing as mp
+from functools import partial
 from lib import EegData
 from lib import DataPipe
 
@@ -46,11 +48,17 @@ def bin2bucket_impl(data):
     pipe = DataPipe.DataPipeOffline(
         depth = n_points,
         default = 0,
-        workers = 4
+        workers = 1
     )
 
     pipe.set_function(FFTBucket)
     return np.concatenate(map(pipe.calc, data.T), axis=1)
+
+def process(input_dir, output_dir, input_filename):
+    data = EegData.from_load(input_dir, input_filename)
+    new_data = bin2bucket(data)
+    new_data.save(output_dir)
+    pass
 
 def main():
     if len(sys.argv) < 3:
@@ -69,11 +77,12 @@ def main():
         print 'Error: invalid output_dir "{}"'.format(output_dir)
         return
 
-    raw_data = EegData.load_folder_as_dict(input_dir, EegData.EegData.TYPE_DATA)
-    for key, val in raw_data.items():
-        print key, val.name, val.type
-
-    fft_data = bin2bucket_batch(raw_data)
+    input_files = os.listdir(input_dir)
+    types = [EegData.EegData.TYPE_DATA]
+    input_files = filter(lambda x: EegData.extract_type(x) in types, input_files)
+    pool = mp.Pool(4)
+    func = partial(process, input_dir, output_dir)
+    pool.map(func, input_files)
 
 def test():
     v = np.ones([512, 1]) + np.matrix([math.sin(2 * math.pi * x * 200 / 500) for x in range(512)]).transpose()
